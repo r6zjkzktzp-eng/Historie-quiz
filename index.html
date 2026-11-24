@@ -139,6 +139,14 @@ th { color: #c43f79; }
     line-height: 1.5;
 }
 
+#stopMusic {
+    background: #492638;
+}
+
+#stopMusic:hover {
+    background: #24121c;
+}
+
 @media(max-width: 550px) {
     .container { padding: 22px; }
     h1 { font-size: 25px; }
@@ -214,6 +222,18 @@ th { color: #c43f79; }
 
     <p id="resultMessage"></p>
 
+    <h2 id="rockTitle" class="hidden">
+        ROCK-SEJR! 
+    </h2>
+
+    <p id="musicMessage" class="hidden">
+        Du fik mindst 18 point! Nyd din rocksejr!
+    </p>
+
+    <button id="stopMusic" class="hidden" onclick="stopVictoryMusic()">
+        STOP ROCKMUSIK
+    </button>
+
     <h2>Klassens rangliste</h2>
 
     <div id="leaderboard"></div>
@@ -239,11 +259,7 @@ const questions = [
 
 {
 q: "Hvilke øer var kendt som Dansk Vestindien?",
-a: [
-"Haiti, Cuba og Jamaica",
-"St. Thomas, St. Jan og St. Croix",
-"Barbados, Grenada og Trinidad"
-],
+a: ["Haiti, Cuba og Jamaica", "St. Thomas, St. Jan og St. Croix", "Barbados, Grenada og Trinidad"],
 c: 1,
 e: "Dansk Vestindien bestod af St. Thomas, St. Jan og St. Croix."
 },
@@ -257,11 +273,7 @@ e: "Sukker var en meget vigtig handelsvare."
 
 {
 q: "Hvad var trekantshandlen?",
-a: [
-"Handel mellem tre europæiske lande",
-"Handel mellem Europa, Afrika og Caribien",
-"Handel mellem tre danske byer"
-],
+a: ["Handel mellem tre europæiske lande", "Handel mellem Europa, Afrika og Caribien", "Handel mellem tre danske byer"],
 c: 1,
 e: "Trekantshandlen forbandt Europa, Afrika og Caribien."
 },
@@ -289,11 +301,7 @@ e: "Guldkysten lå i det område, der i dag er Ghana."
 
 {
 q: "Hvad blev forterne på Guldkysten blandt andet brugt til?",
-a: [
-"Handel, også med mennesker",
-"Ferieboliger",
-"Skoler"
-],
+a: ["Handel, også med mennesker", "Ferieboliger", "Skoler"],
 c: 0,
 e: "Forterne blev brugt til handel og indgik i slavehandlen."
 },
@@ -307,115 +315,73 @@ e: "Danmark solgte øerne til USA i 1917."
 
 {
 q: "Hvad hedder Dansk Vestindien i dag?",
-a: [
-"De Amerikanske Jomfruøer",
-"Bahamas",
-"De Britiske Jomfruøer"
-],
+a: ["De Amerikanske Jomfruøer", "Bahamas", "De Britiske Jomfruøer"],
 c: 0,
 e: "De hedder i dag De Amerikanske Jomfruøer."
 },
 
 {
 q: "Hvad betyder afkolonisering?",
-a: [
-"At oprette flere kolonier",
-"At kolonier frigør sig fra kolonimagten",
-"At lande handler mere med hinanden"
-],
+a: ["At oprette flere kolonier", "At kolonier frigør sig fra kolonimagten", "At lande handler mere med hinanden"],
 c: 1,
 e: "Afkolonisering betyder, at kolonier frigør sig fra kolonimagten."
 },
 
 {
 q: "Hvad kan kulturel afkolonisering handle om?",
-a: [
-"At undersøge gamle koloniale forestillinger",
-"At forbyde historisk forskning",
-"At gøre alle lande ens"
-],
+a: ["At undersøge gamle koloniale forestillinger", "At forbyde historisk forskning", "At gøre alle lande ens"],
 c: 0,
 e: "Det handler blandt andet om kultur, identitet og historiefortælling."
 },
 
 {
 q: "Hvad var et vigtigt formål med plantagerne i Dansk Vestindien?",
-a: [
-"At producere sukker til eksport",
-"At bygge skibe",
-"At dyrke korn til Danmark alene"
-],
+a: ["At producere sukker til eksport", "At bygge skibe", "At dyrke korn til Danmark alene"],
 c: 0,
 e: "Plantagerne producerede især sukker til eksport."
 },
 
 {
 q: "Hvad betyder det, at mennesker var slavegjorte?",
-a: [
-"At de arbejdede frivilligt",
-"At de blev frataget deres frihed",
-"At de var midlertidigt ansatte"
-],
+a: ["At de arbejdede frivilligt", "At de blev frataget deres frihed", "At de var midlertidigt ansatte"],
 c: 1,
 e: "Slavegjorte mennesker blev frataget deres frihed og rettigheder."
 },
 
 {
 q: "Hvad skete der i 1848 i Dansk Vestindien?",
-a: [
-"Slaveriet blev ophævet",
-"Øerne blev solgt til USA",
-"Danmark købte øerne"
-],
+a: ["Slaveriet blev ophævet", "Øerne blev solgt til USA", "Danmark købte øerne"],
 c: 0,
 e: "Slaveriet blev ophævet i Dansk Vestindien i 1848."
 },
 
 {
 q: "Hvad kan et monument eller mindesmærke vise?",
-a: [
-"Hvem et samfund vælger at mindes",
-"At historien aldrig ændrer sig",
-"At alle er enige om fortiden"
-],
+a: ["Hvem et samfund vælger at mindes", "At historien aldrig ændrer sig", "At alle er enige om fortiden"],
 c: 0,
 e: "Mindesmærker viser, hvem og hvad samfundet vælger at huske."
 },
 
 {
 q: "Hvorfor skaber Danmarks koloniale fortid stadig debat?",
-a: [
-"Fordi fortiden ikke betyder noget",
-"Fordi kolonitiden har eftervirkninger",
-"Fordi alle kilder siger det samme"
-],
+a: ["Fordi fortiden ikke betyder noget", "Fordi kolonitiden har eftervirkninger", "Fordi alle kilder siger det samme"],
 c: 1,
 e: "Kolonitiden har eftervirkninger og huskes forskelligt."
 },
 
 {
 q: "Hvad betyder kildekritik?",
-a: [
-"At tro på alt, en kilde siger",
-"At undersøge hvem der har lavet kilden og hvorfor",
-"Kun at læse overskriften"
-],
+a: ["At tro på alt, en kilde siger", "At undersøge hvem der har lavet kilden og hvorfor", "Kun at læse overskriften"],
 c: 1,
 e: "Kildekritik handler blandt andet om afsender, tid og formål."
 },
 
 {
 q: "Hvorfor er det vigtigt at inddrage perspektiver fra tidligere kolonier?",
-a: [
-"Så historien kun handler om Danmark",
-"Så flere erfaringer og synsvinkler kommer med",
-"Så man kan undgå at bruge kilder"
-],
+a: ["Så historien kun handler om Danmark", "Så flere erfaringer og synsvinkler kommer med", "Så man kan undgå at bruge kilder"],
 c: 1,
 e: "Flere perspektiver giver et mere nuanceret billede af historien."
 },
-
-// NYT SPØRGSMÅL OM WULFFS BREV
 
 {
 q: "Læs citatet fra Wulff Joseph Wulffs brev om slaverne fra 19. december 1836. Hvad fortæller citatet om hans syn på slaveriet?",
@@ -428,8 +394,6 @@ a: [
 c: 0,
 e: "Citatet viser, at Wulff beskriver et system, hvor slaveejere havde stor magt over de mennesker, de ejede. Kilde: Wulffs brev, 19. december 1836."
 },
-
-// NYT SPØRGSMÅL OM KILDEKRITIK
 
 {
 q: "Hvordan skal Wulff Joseph Wulffs breve bedst betegnes som historiske kilder?",
@@ -452,6 +416,8 @@ let player = "";
 let current = 0;
 let score = 0;
 let answered = false;
+let victoryAudio = null;
+let victoryTimer = null;
 
 
 // START QUIZ
@@ -481,7 +447,6 @@ function showQuestion() {
     const q = questions[current];
 
     document.getElementById("question").textContent = q.q;
-
     document.getElementById("quoteArea").innerHTML = "";
 
     if (q.quote) {
@@ -501,9 +466,7 @@ function showQuestion() {
         (current / questions.length * 100) + "%";
 
     document.getElementById("feedback").textContent = "";
-
     document.getElementById("next").disabled = true;
-
     document.getElementById("answers").innerHTML = "";
 
     q.a.forEach((answer, index) => {
@@ -531,7 +494,6 @@ function checkAnswer(selected) {
     answered = true;
 
     const q = questions[current];
-
     const buttons = document.querySelectorAll(".answer");
 
     buttons.forEach((button, index) => {
@@ -610,8 +572,11 @@ function finishQuiz() {
     showLeaderboard();
     createConfetti();
 
-    // ROCK-SEJERSMUSIK TIL DEM MED MINDST 18 POINT
     if (score >= 18) {
+
+        document.getElementById("rockTitle").classList.remove("hidden");
+        document.getElementById("musicMessage").classList.remove("hidden");
+
         playVictoryMusic();
     }
 
@@ -714,7 +679,6 @@ function createConfetti() {
         const piece = document.createElement("div");
 
         piece.className = "confetti-piece";
-
         piece.style.left = Math.random() * 100 + "vw";
 
         piece.style.background =
@@ -737,8 +701,7 @@ function createConfetti() {
 }
 
 
-// ORIGINAL ROCK-INSPIRERET SEJERSMELODI
-// Musikken er lavet med lydtoner i selve koden.
+// 60 SEKUNDERS ORIGINAL ROCKMUSIK
 
 function playVictoryMusic() {
 
@@ -747,49 +710,144 @@ function playVictoryMusic() {
 
     if (!AudioContext) return;
 
-    const audio = new AudioContext();
+    victoryAudio = new AudioContext();
 
-    const notes = [
-        [196, 0],
-        [196, 0.18],
-        [294, 0.36],
-        [392, 0.54],
-        [349, 0.78],
-        [392, 1.02],
-        [523, 1.26],
-        [392, 1.55],
-        [523, 1.8],
-        [587, 2.05],
-        [784, 2.3]
-    ];
+    const audio = victoryAudio;
+    const duration = 60;
+    const bpm = 120;
+    const beat = 60 / bpm;
 
-    notes.forEach(([frequency, start]) => {
+    let stopped = false;
+
+    const stopButton = document.getElementById("stopMusic");
+    stopButton.classList.remove("hidden");
+
+    function guitar(freq, start, length) {
 
         const oscillator = audio.createOscillator();
-        const volume = audio.createGain();
+        const distortion = audio.createWaveShaper();
+        const gain = audio.createGain();
 
         oscillator.type = "sawtooth";
-        oscillator.frequency.value = frequency;
+        oscillator.frequency.value = freq;
 
-        volume.gain.setValueAtTime(0.0001, audio.currentTime + start);
-        volume.gain.linearRampToValueAtTime(
-            0.12,
-            audio.currentTime + start + 0.03
+        const curve = new Float32Array(44100);
+
+        for (let i = 0; i < curve.length; i++) {
+            const x = i * 2 / curve.length - 1;
+            curve[i] = Math.tanh(x * 5);
+        }
+
+        distortion.curve = curve;
+
+        gain.gain.setValueAtTime(
+            0.0001, audio.currentTime + start
         );
-        volume.gain.exponentialRampToValueAtTime(
+
+        gain.gain.linearRampToValueAtTime(
+            0.18, audio.currentTime + start + 0.03
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
             0.0001,
-            audio.currentTime + start + 0.2
+            audio.currentTime + start + length
         );
 
-        oscillator.connect(volume);
-        volume.connect(audio.destination);
+        oscillator.connect(distortion);
+        distortion.connect(gain);
+        gain.connect(audio.destination);
 
         oscillator.start(audio.currentTime + start);
-        oscillator.stop(audio.currentTime + start + 0.22);
+        oscillator.stop(audio.currentTime + start + length);
+    }
 
-    });
 
-    setTimeout(() => audio.close(), 3500);
+    function drum(start, frequency, volume, length) {
+
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.setValueAtTime(
+            frequency, audio.currentTime + start
+        );
+
+        oscillator.frequency.exponentialRampToValueAtTime(
+            35, audio.currentTime + start + length
+        );
+
+        gain.gain.setValueAtTime(
+            volume, audio.currentTime + start
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001, audio.currentTime + start + length
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+
+        oscillator.start(audio.currentTime + start);
+        oscillator.stop(audio.currentTime + start + length);
+    }
+
+
+    const riff = [
+        82.41, 82.41, 110, 123.47,
+        82.41, 82.41, 146.83, 123.47,
+        164.81, 146.83, 123.47, 110
+    ];
+
+
+    for (let t = 0; t < duration; t += beat / 2) {
+
+        const position =
+            Math.floor(t / (beat / 2)) % riff.length;
+
+        guitar(riff[position], t, 0.22);
+
+        if (Math.round(t / beat) % 2 === 0) {
+            drum(t, 110, 0.35, 0.18);
+        } else {
+            drum(t, 180, 0.18, 0.12);
+        }
+
+        if (Math.floor(t / 4) % 2 === 1) {
+            guitar(riff[position] * 2, t, 0.18);
+        }
+
+    }
+
+
+    victoryTimer = setTimeout(() => {
+
+        if (!stopped && victoryAudio === audio) {
+            audio.close();
+            victoryAudio = null;
+            stopButton.classList.add("hidden");
+        }
+
+    }, duration * 1000);
+
+}
+
+
+// STOP ROCKMUSIK
+
+function stopVictoryMusic() {
+
+    if (victoryTimer) {
+        clearTimeout(victoryTimer);
+        victoryTimer = null;
+    }
+
+    if (victoryAudio) {
+        victoryAudio.close();
+        victoryAudio = null;
+    }
+
+    document.getElementById("stopMusic").classList.add("hidden");
 
 }
 
