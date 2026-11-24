@@ -7,9 +7,7 @@
 <title>Danmarks koloniale fortid – Quiz</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -33,14 +31,7 @@ body {
     text-align: center;
 }
 
-h1 {
-    color: #c43f79;
-    font-size: 32px;
-}
-
-h2 {
-    color: #c43f79;
-}
+h1, h2 { color: #c43f79; }
 
 input {
     width: 100%;
@@ -63,9 +54,7 @@ button {
     margin: 7px;
 }
 
-button:hover {
-    background: #b93670;
-}
+button:hover { background: #b93670; }
 
 .answer {
     display: block;
@@ -76,18 +65,13 @@ button:hover {
     text-align: left;
 }
 
-.answer:hover {
-    background: #fbd1e2;
-}
-
-.answer:disabled {
-    opacity: 1;
-    cursor: default;
-}
+.answer:hover { background: #fbd1e2; }
+.answer:disabled { opacity: 1; cursor: default; }
 
 #feedback {
     margin: 20px 0;
     font-weight: bold;
+    line-height: 1.5;
 }
 
 #progress {
@@ -105,9 +89,7 @@ button:hover {
     transition: width 0.3s;
 }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 #confetti {
     position: fixed;
@@ -125,9 +107,7 @@ button:hover {
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(110vh) rotate(720deg);
-    }
+    to { transform: translateY(110vh) rotate(720deg); }
 }
 
 table {
@@ -142,23 +122,26 @@ td, th {
     text-align: left;
 }
 
-th {
-    color: #c43f79;
-}
+th { color: #c43f79; }
 
 .small {
     color: #977080;
     font-size: 13px;
 }
 
-@media(max-width: 550px) {
-    .container {
-        padding: 22px;
-    }
+.quote {
+    background: #fff0f6;
+    border-left: 5px solid #d94f8b;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    font-style: italic;
+    line-height: 1.5;
+}
 
-    h1 {
-        font-size: 25px;
-    }
+@media(max-width: 550px) {
+    .container { padding: 22px; }
+    h1 { font-size: 25px; }
 }
 </style>
 </head>
@@ -168,8 +151,6 @@ th {
 <div id="confetti"></div>
 
 <div class="container">
-
-<!-- STARTSIDE -->
 
 <section id="start">
     <h1>Danmarks koloniale fortid</h1>
@@ -191,9 +172,7 @@ th {
 
     <br>
 
-    <button onclick="startQuiz()">
-        START QUIZ
-    </button>
+    <button onclick="startQuiz()">START QUIZ</button>
 
     <p class="small">
         20 spørgsmål · 1 point pr. rigtigt svar
@@ -201,11 +180,11 @@ th {
 </section>
 
 
-<!-- QUIZ -->
-
 <section id="quiz" class="hidden">
 
     <h2 id="question"></h2>
+
+    <div id="quoteArea"></div>
 
     <div id="progress">
         <div id="bar"></div>
@@ -224,8 +203,6 @@ th {
 
 </section>
 
-
-<!-- RESULTAT -->
 
 <section id="result" class="hidden">
 
@@ -246,8 +223,7 @@ th {
     </button>
 
     <p class="small">
-        Ranglisten i denne version gemmes kun på
-        den aktuelle enhed.
+        Ranglisten i denne version gemmes kun på den aktuelle enhed.
     </p>
 
 </section>
@@ -305,13 +281,6 @@ e: "Forbuddet trådte i kraft i 1803."
 },
 
 {
-q: "Hvor lå den danske koloni Tranquebar?",
-a: ["Indien", "Caribien", "Vestafrika"],
-c: 0,
-e: "Tranquebar var en dansk handelskoloni i Indien."
-},
-
-{
 q: "Hvor lå den danske Guldkyst?",
 a: ["Vestafrika", "Sydamerika", "Sydøstasien"],
 c: 0,
@@ -345,13 +314,6 @@ a: [
 ],
 c: 0,
 e: "De hedder i dag De Amerikanske Jomfruøer."
-},
-
-{
-q: "Hvornår ophørte Grønlands formelle kolonistatus?",
-a: ["1917", "1945", "1953"],
-c: 2,
-e: "Grønlands kolonistatus ophørte i 1953."
 },
 
 {
@@ -451,6 +413,34 @@ a: [
 ],
 c: 1,
 e: "Flere perspektiver giver et mere nuanceret billede af historien."
+},
+
+// NYT SPØRGSMÅL OM WULFFS BREV
+
+{
+q: "Læs citatet fra Wulff Joseph Wulffs brev om slaverne fra 19. december 1836. Hvad fortæller citatet om hans syn på slaveriet?",
+quote: "“Det står enhver frit for at behandle sine slaver, som han lyster.”",
+a: [
+"Han mente, at slaveejere selv kunne bestemme, hvordan de behandlede slaverne",
+"Han mente, at alle slaver skulle have deres frihed",
+"Han mente, at slaveri skulle forbydes med det samme"
+],
+c: 0,
+e: "Citatet viser, at Wulff beskriver et system, hvor slaveejere havde stor magt over de mennesker, de ejede. Kilde: Wulffs brev, 19. december 1836."
+},
+
+// NYT SPØRGSMÅL OM KILDEKRITIK
+
+{
+q: "Hvordan skal Wulff Joseph Wulffs breve bedst betegnes som historiske kilder?",
+quote: "Brevene blev sendt hjem til hans familie i Danmark og beskriver hans oplevelser på Guldkysten.",
+a: [
+"Som førstehåndskilder, fordi han selv oplevede og beskrev forholdene",
+"Som andenhåndskilder, fordi han aldrig havde været på Guldkysten",
+"Som fiktion, fordi brevene er personlige"
+],
+c: 0,
+e: "Brevene er førstehåndskilder, fordi Wulff selv var til stede og skrev om sine oplevelser. Men de er subjektive, fordi de viser hans personlige synspunkter."
 }
 
 ];
@@ -492,8 +482,17 @@ function showQuestion() {
 
     document.getElementById("question").textContent = q.q;
 
+    document.getElementById("quoteArea").innerHTML = "";
+
+    if (q.quote) {
+        const quote = document.createElement("div");
+        quote.className = "quote";
+        quote.textContent = q.quote;
+        document.getElementById("quoteArea").appendChild(quote);
+    }
+
     document.getElementById("number").textContent =
-        "Spørgsmål " + (current + 1) + " af 20";
+        "Spørgsmål " + (current + 1) + " af " + questions.length;
 
     document.getElementById("score").textContent =
         "Point: " + score;
@@ -580,13 +579,9 @@ function nextQuestion() {
     current++;
 
     if (current < questions.length) {
-
         showQuestion();
-
     } else {
-
         finishQuiz();
-
     }
 
 }
@@ -603,7 +598,7 @@ function finishQuiz() {
         "Godt gået, " + player + "!";
 
     document.getElementById("finalScore").textContent =
-        score + " / 20 point";
+        score + " / " + questions.length + " point";
 
     document.getElementById("resultMessage").textContent =
         score >= 18 ? "Fantastisk! Du har virkelig styr på historien!" :
@@ -612,10 +607,13 @@ function finishQuiz() {
         "Godt forsøgt! Du har lært lidt mere om historien.";
 
     saveScore();
-
     showLeaderboard();
-
     createConfetti();
+
+    // ROCK-SEJERSMUSIK TIL DEM MED MINDST 18 POINT
+    if (score >= 18) {
+        playVictoryMusic();
+    }
 
 }
 
@@ -683,6 +681,7 @@ function showLeaderboard() {
 // BESKYT NAVNE I RANGLISTEN
 
 function escapeHTML(value) {
+
     return String(value).replace(/[&<>"']/g, character => ({
         "&": "&amp;",
         "<": "&lt;",
@@ -690,6 +689,7 @@ function escapeHTML(value) {
         '"': "&quot;",
         "'": "&#039;"
     })[character]);
+
 }
 
 
@@ -733,6 +733,63 @@ function createConfetti() {
     setTimeout(() => {
         area.innerHTML = "";
     }, 5000);
+
+}
+
+
+// ORIGINAL ROCK-INSPIRERET SEJERSMELODI
+// Musikken er lavet med lydtoner i selve koden.
+
+function playVictoryMusic() {
+
+    const AudioContext =
+        window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContext) return;
+
+    const audio = new AudioContext();
+
+    const notes = [
+        [196, 0],
+        [196, 0.18],
+        [294, 0.36],
+        [392, 0.54],
+        [349, 0.78],
+        [392, 1.02],
+        [523, 1.26],
+        [392, 1.55],
+        [523, 1.8],
+        [587, 2.05],
+        [784, 2.3]
+    ];
+
+    notes.forEach(([frequency, start]) => {
+
+        const oscillator = audio.createOscillator();
+        const volume = audio.createGain();
+
+        oscillator.type = "sawtooth";
+        oscillator.frequency.value = frequency;
+
+        volume.gain.setValueAtTime(0.0001, audio.currentTime + start);
+        volume.gain.linearRampToValueAtTime(
+            0.12,
+            audio.currentTime + start + 0.03
+        );
+        volume.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audio.currentTime + start + 0.2
+        );
+
+        oscillator.connect(volume);
+        volume.connect(audio.destination);
+
+        oscillator.start(audio.currentTime + start);
+        oscillator.stop(audio.currentTime + start + 0.22);
+
+    });
+
+    setTimeout(() => audio.close(), 3500);
 
 }
 
