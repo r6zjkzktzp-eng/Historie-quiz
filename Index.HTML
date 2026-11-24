@@ -1,0 +1,857 @@
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danmarks koloniale fortid – Quiz</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #492638;
+    background: linear-gradient(135deg, #ffe5ef, #f8b8d2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 750px;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px #c66b9140;
+    text-align: center;
+}
+
+h1, h2 { color: #c43f79; }
+
+input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #efb4cd;
+    border-radius: 12px;
+    font-size: 17px;
+    margin: 15px 0;
+}
+
+button {
+    background: #d94f8b;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 7px;
+}
+
+button:hover { background: #b93670; }
+
+.answer {
+    display: block;
+    width: 100%;
+    background: #ffe8f1;
+    color: #642d48;
+    border: 2px solid #f3c2d6;
+    text-align: left;
+}
+
+.answer:hover { background: #fbd1e2; }
+.answer:disabled { opacity: 1; cursor: default; }
+
+#feedback {
+    margin: 20px 0;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#progress {
+    background: #f7dce8;
+    height: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+#bar {
+    height: 100%;
+    width: 0%;
+    background: #d94f8b;
+    transition: width 0.3s;
+}
+
+.hidden { display: none; }
+
+#confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 10px;
+    height: 15px;
+    animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+td, th {
+    padding: 12px;
+    border-bottom: 1px solid #f2c9d9;
+    text-align: left;
+}
+
+th { color: #c43f79; }
+
+.small {
+    color: #977080;
+    font-size: 13px;
+}
+
+.quote {
+    background: #fff0f6;
+    border-left: 5px solid #d94f8b;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+#stopMusic {
+    background: #492638;
+}
+
+#stopMusic:hover {
+    background: #24121c;
+}
+
+@media(max-width: 550px) {
+    .container { padding: 22px; }
+    h1 { font-size: 25px; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="confetti"></div>
+
+<div class="container">
+
+<section id="start">
+    <h1>Danmarks koloniale fortid</h1>
+
+    <p>
+        Velkommen til klassequizzen!
+        Test din viden om Dansk Vestindien,
+        trekantshandlen og Danmarks kolonihistorie.
+    </p>
+
+    <h2>31 deltagere – hvem vinder?</h2>
+
+    <input
+        type="text"
+        id="name"
+        placeholder="Skriv dit navn her"
+        maxlength="30"
+    >
+
+    <br>
+
+    <button onclick="startQuiz()">START QUIZ</button>
+
+    <p class="small">
+        20 spørgsmål · 1 point pr. rigtigt svar
+    </p>
+</section>
+
+
+<section id="quiz" class="hidden">
+
+    <h2 id="question"></h2>
+
+    <div id="quoteArea"></div>
+
+    <div id="progress">
+        <div id="bar"></div>
+    </div>
+
+    <p id="number"></p>
+    <p id="score">Point: 0</p>
+
+    <div id="answers"></div>
+
+    <p id="feedback"></p>
+
+    <button id="next" onclick="nextQuestion()" disabled>
+        NÆSTE SPØRGSMÅL
+    </button>
+
+</section>
+
+
+<section id="result" class="hidden">
+
+    <h1>QUIZ GENNEMFØRT!</h1>
+
+    <h2 id="resultName"></h2>
+
+    <h1 id="finalScore"></h1>
+
+    <p id="resultMessage"></p>
+
+    <h2 id="rockTitle" class="hidden">
+        ROCK-SEJR! 
+    </h2>
+
+    <p id="musicMessage" class="hidden">
+        Du fik mindst 18 point! Nyd din rocksejr!
+    </p>
+
+    <button id="stopMusic" class="hidden" onclick="stopVictoryMusic()">
+        STOP ROCKMUSIK
+    </button>
+
+    <h2>Klassens rangliste</h2>
+
+    <div id="leaderboard"></div>
+
+    <button onclick="location.reload()">
+        Tilbage til start
+    </button>
+
+    <p class="small">
+        Ranglisten i denne version gemmes kun på den aktuelle enhed.
+    </p>
+
+</section>
+
+</div>
+
+
+<script>
+
+// ALLE 20 SPØRGSMÅL
+
+const questions = [
+
+{
+q: "Hvilke øer var kendt som Dansk Vestindien?",
+a: ["Haiti, Cuba og Jamaica", "St. Thomas, St. Jan og St. Croix", "Barbados, Grenada og Trinidad"],
+c: 1,
+e: "Dansk Vestindien bestod af St. Thomas, St. Jan og St. Croix."
+},
+
+{
+q: "Hvilken vare var især vigtig på plantagerne i Dansk Vestindien?",
+a: ["Sukker", "Kaffe", "Tobak"],
+c: 0,
+e: "Sukker var en meget vigtig handelsvare."
+},
+
+{
+q: "Hvad var trekantshandlen?",
+a: ["Handel mellem tre europæiske lande", "Handel mellem Europa, Afrika og Caribien", "Handel mellem tre danske byer"],
+c: 1,
+e: "Trekantshandlen forbandt Europa, Afrika og Caribien."
+},
+
+{
+q: "Hvilket år vedtog Danmark et forbud mod den transatlantiske slavehandel?",
+a: ["1750", "1792", "1848"],
+c: 1,
+e: "Forbuddet blev vedtaget i 1792, men trådte først i kraft i 1803."
+},
+
+{
+q: "Hvornår trådte forbuddet mod slavehandel i kraft?",
+a: ["1792", "1803", "1848"],
+c: 1,
+e: "Forbuddet trådte i kraft i 1803."
+},
+
+{
+q: "Hvor lå den danske Guldkyst?",
+a: ["Vestafrika", "Sydamerika", "Sydøstasien"],
+c: 0,
+e: "Guldkysten lå i det område, der i dag er Ghana."
+},
+
+{
+q: "Hvad blev forterne på Guldkysten blandt andet brugt til?",
+a: ["Handel, også med mennesker", "Ferieboliger", "Skoler"],
+c: 0,
+e: "Forterne blev brugt til handel og indgik i slavehandlen."
+},
+
+{
+q: "Hvilket land overtog Dansk Vestindien i 1917?",
+a: ["Storbritannien", "USA", "Frankrig"],
+c: 1,
+e: "Danmark solgte øerne til USA i 1917."
+},
+
+{
+q: "Hvad hedder Dansk Vestindien i dag?",
+a: ["De Amerikanske Jomfruøer", "Bahamas", "De Britiske Jomfruøer"],
+c: 0,
+e: "De hedder i dag De Amerikanske Jomfruøer."
+},
+
+{
+q: "Hvad betyder afkolonisering?",
+a: ["At oprette flere kolonier", "At kolonier frigør sig fra kolonimagten", "At lande handler mere med hinanden"],
+c: 1,
+e: "Afkolonisering betyder, at kolonier frigør sig fra kolonimagten."
+},
+
+{
+q: "Hvad kan kulturel afkolonisering handle om?",
+a: ["At undersøge gamle koloniale forestillinger", "At forbyde historisk forskning", "At gøre alle lande ens"],
+c: 0,
+e: "Det handler blandt andet om kultur, identitet og historiefortælling."
+},
+
+{
+q: "Hvad var et vigtigt formål med plantagerne i Dansk Vestindien?",
+a: ["At producere sukker til eksport", "At bygge skibe", "At dyrke korn til Danmark alene"],
+c: 0,
+e: "Plantagerne producerede især sukker til eksport."
+},
+
+{
+q: "Hvad betyder det, at mennesker var slavegjorte?",
+a: ["At de arbejdede frivilligt", "At de blev frataget deres frihed", "At de var midlertidigt ansatte"],
+c: 1,
+e: "Slavegjorte mennesker blev frataget deres frihed og rettigheder."
+},
+
+{
+q: "Hvad skete der i 1848 i Dansk Vestindien?",
+a: ["Slaveriet blev ophævet", "Øerne blev solgt til USA", "Danmark købte øerne"],
+c: 0,
+e: "Slaveriet blev ophævet i Dansk Vestindien i 1848."
+},
+
+{
+q: "Hvad kan et monument eller mindesmærke vise?",
+a: ["Hvem et samfund vælger at mindes", "At historien aldrig ændrer sig", "At alle er enige om fortiden"],
+c: 0,
+e: "Mindesmærker viser, hvem og hvad samfundet vælger at huske."
+},
+
+{
+q: "Hvorfor skaber Danmarks koloniale fortid stadig debat?",
+a: ["Fordi fortiden ikke betyder noget", "Fordi kolonitiden har eftervirkninger", "Fordi alle kilder siger det samme"],
+c: 1,
+e: "Kolonitiden har eftervirkninger og huskes forskelligt."
+},
+
+{
+q: "Hvad betyder kildekritik?",
+a: ["At tro på alt, en kilde siger", "At undersøge hvem der har lavet kilden og hvorfor", "Kun at læse overskriften"],
+c: 1,
+e: "Kildekritik handler blandt andet om afsender, tid og formål."
+},
+
+{
+q: "Hvorfor er det vigtigt at inddrage perspektiver fra tidligere kolonier?",
+a: ["Så historien kun handler om Danmark", "Så flere erfaringer og synsvinkler kommer med", "Så man kan undgå at bruge kilder"],
+c: 1,
+e: "Flere perspektiver giver et mere nuanceret billede af historien."
+},
+
+{
+q: "Læs citatet fra Wulff Joseph Wulffs brev om slaverne fra 19. december 1836. Hvad fortæller citatet om hans syn på slaveriet?",
+quote: "“Det står enhver frit for at behandle sine slaver, som han lyster.”",
+a: [
+"Han mente, at slaveejere selv kunne bestemme, hvordan de behandlede slaverne",
+"Han mente, at alle slaver skulle have deres frihed",
+"Han mente, at slaveri skulle forbydes med det samme"
+],
+c: 0,
+e: "Citatet viser, at Wulff beskriver et system, hvor slaveejere havde stor magt over de mennesker, de ejede. Kilde: Wulffs brev, 19. december 1836."
+},
+
+{
+q: "Hvordan skal Wulff Joseph Wulffs breve bedst betegnes som historiske kilder?",
+quote: "Brevene blev sendt hjem til hans familie i Danmark og beskriver hans oplevelser på Guldkysten.",
+a: [
+"Som førstehåndskilder, fordi han selv oplevede og beskrev forholdene",
+"Som andenhåndskilder, fordi han aldrig havde været på Guldkysten",
+"Som fiktion, fordi brevene er personlige"
+],
+c: 0,
+e: "Brevene er førstehåndskilder, fordi Wulff selv var til stede og skrev om sine oplevelser. Men de er subjektive, fordi de viser hans personlige synspunkter."
+}
+
+];
+
+
+// VARIABLER
+
+let player = "";
+let current = 0;
+let score = 0;
+let answered = false;
+let victoryAudio = null;
+let victoryTimer = null;
+
+
+// START QUIZ
+
+function startQuiz() {
+
+    player = document.getElementById("name").value.trim();
+
+    if (!player) {
+        alert("Skriv dit navn først!");
+        return;
+    }
+
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+
+    showQuestion();
+}
+
+
+// VIS SPØRGSMÅL
+
+function showQuestion() {
+
+    answered = false;
+
+    const q = questions[current];
+
+    document.getElementById("question").textContent = q.q;
+    document.getElementById("quoteArea").innerHTML = "";
+
+    if (q.quote) {
+        const quote = document.createElement("div");
+        quote.className = "quote";
+        quote.textContent = q.quote;
+        document.getElementById("quoteArea").appendChild(quote);
+    }
+
+    document.getElementById("number").textContent =
+        "Spørgsmål " + (current + 1) + " af " + questions.length;
+
+    document.getElementById("score").textContent =
+        "Point: " + score;
+
+    document.getElementById("bar").style.width =
+        (current / questions.length * 100) + "%";
+
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("next").disabled = true;
+    document.getElementById("answers").innerHTML = "";
+
+    q.a.forEach((answer, index) => {
+
+        const button = document.createElement("button");
+
+        button.textContent = answer;
+        button.className = "answer";
+
+        button.onclick = () => checkAnswer(index);
+
+        document.getElementById("answers").appendChild(button);
+
+    });
+
+}
+
+
+// TJEK SVAR
+
+function checkAnswer(selected) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const q = questions[current];
+    const buttons = document.querySelectorAll(".answer");
+
+    buttons.forEach((button, index) => {
+
+        button.disabled = true;
+
+        if (index === q.c) {
+            button.style.background = "#c8f0d2";
+        }
+
+        if (index === selected && selected !== q.c) {
+            button.style.background = "#ffd0d0";
+        }
+
+    });
+
+    if (selected === q.c) {
+
+        score++;
+
+        document.getElementById("feedback").textContent =
+            "Rigtigt! " + q.e;
+
+    } else {
+
+        document.getElementById("feedback").textContent =
+            "Ikke helt. " + q.e;
+
+    }
+
+    document.getElementById("score").textContent =
+        "Point: " + score;
+
+    document.getElementById("next").disabled = false;
+
+}
+
+
+// NÆSTE SPØRGSMÅL
+
+function nextQuestion() {
+
+    if (!answered) return;
+
+    current++;
+
+    if (current < questions.length) {
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
+
+}
+
+
+// AFSLUT QUIZ
+
+function finishQuiz() {
+
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("resultName").textContent =
+        "Godt gået, " + player + "!";
+
+    document.getElementById("finalScore").textContent =
+        score + " / " + questions.length + " point";
+
+    document.getElementById("resultMessage").textContent =
+        score >= 18 ? "Fantastisk! Du har virkelig styr på historien!" :
+        score >= 14 ? "Virkelig flot klaret!" :
+        score >= 10 ? "Godt arbejde!" :
+        "Godt forsøgt! Du har lært lidt mere om historien.";
+
+    saveScore();
+    showLeaderboard();
+    createConfetti();
+
+    if (score >= 18) {
+
+        document.getElementById("rockTitle").classList.remove("hidden");
+        document.getElementById("musicMessage").classList.remove("hidden");
+
+        playVictoryMusic();
+    }
+
+}
+
+
+// GEM POINT PÅ ENHEDEN
+
+function saveScore() {
+
+    let scores = JSON.parse(
+        localStorage.getItem("kolonihistorieScores") || "[]"
+    );
+
+    scores.push({
+        name: player,
+        score: score,
+        time: Date.now()
+    });
+
+    scores.sort((a, b) => b.score - a.score);
+
+    localStorage.setItem(
+        "kolonihistorieScores",
+        JSON.stringify(scores.slice(0, 31))
+    );
+
+}
+
+
+// VIS RANGLISTE
+
+function showLeaderboard() {
+
+    const scores = JSON.parse(
+        localStorage.getItem("kolonihistorieScores") || "[]"
+    );
+
+    let html = `
+        <table>
+        <tr>
+            <th>Placering</th>
+            <th>Navn</th>
+            <th>Point</th>
+        </tr>
+    `;
+
+    scores.forEach((person, index) => {
+
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${escapeHTML(person.name)}</td>
+                <td>${person.score}/20</td>
+            </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    document.getElementById("leaderboard").innerHTML = html;
+
+}
+
+
+// BESKYT NAVNE I RANGLISTEN
+
+function escapeHTML(value) {
+
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[character]);
+
+}
+
+
+// KONFETTI
+
+function createConfetti() {
+
+    const colors = [
+        "#ff4f9a",
+        "#ffb6d5",
+        "#f7a8c8",
+        "#d94f8b",
+        "#ffd166"
+    ];
+
+    const area = document.getElementById("confetti");
+
+    area.innerHTML = "";
+
+    for (let i = 0; i < 130; i++) {
+
+        const piece = document.createElement("div");
+
+        piece.className = "confetti-piece";
+        piece.style.left = Math.random() * 100 + "vw";
+
+        piece.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+
+        piece.style.animationDelay =
+            Math.random() * 1.5 + "s";
+
+        piece.style.transform =
+            "rotate(" + Math.random() * 360 + "deg)";
+
+        area.appendChild(piece);
+
+    }
+
+    setTimeout(() => {
+        area.innerHTML = "";
+    }, 5000);
+
+}
+
+
+// 60 SEKUNDERS ORIGINAL ROCKMUSIK
+
+function playVictoryMusic() {
+
+    const AudioContext =
+        window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContext) return;
+
+    victoryAudio = new AudioContext();
+
+    const audio = victoryAudio;
+    const duration = 60;
+    const bpm = 120;
+    const beat = 60 / bpm;
+
+    let stopped = false;
+
+    const stopButton = document.getElementById("stopMusic");
+    stopButton.classList.remove("hidden");
+
+    function guitar(freq, start, length) {
+
+        const oscillator = audio.createOscillator();
+        const distortion = audio.createWaveShaper();
+        const gain = audio.createGain();
+
+        oscillator.type = "sawtooth";
+        oscillator.frequency.value = freq;
+
+        const curve = new Float32Array(44100);
+
+        for (let i = 0; i < curve.length; i++) {
+            const x = i * 2 / curve.length - 1;
+            curve[i] = Math.tanh(x * 5);
+        }
+
+        distortion.curve = curve;
+
+        gain.gain.setValueAtTime(
+            0.0001, audio.currentTime + start
+        );
+
+        gain.gain.linearRampToValueAtTime(
+            0.18, audio.currentTime + start + 0.03
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audio.currentTime + start + length
+        );
+
+        oscillator.connect(distortion);
+        distortion.connect(gain);
+        gain.connect(audio.destination);
+
+        oscillator.start(audio.currentTime + start);
+        oscillator.stop(audio.currentTime + start + length);
+    }
+
+
+    function drum(start, frequency, volume, length) {
+
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.setValueAtTime(
+            frequency, audio.currentTime + start
+        );
+
+        oscillator.frequency.exponentialRampToValueAtTime(
+            35, audio.currentTime + start + length
+        );
+
+        gain.gain.setValueAtTime(
+            volume, audio.currentTime + start
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001, audio.currentTime + start + length
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+
+        oscillator.start(audio.currentTime + start);
+        oscillator.stop(audio.currentTime + start + length);
+    }
+
+
+    const riff = [
+        82.41, 82.41, 110, 123.47,
+        82.41, 82.41, 146.83, 123.47,
+        164.81, 146.83, 123.47, 110
+    ];
+
+
+    for (let t = 0; t < duration; t += beat / 2) {
+
+        const position =
+            Math.floor(t / (beat / 2)) % riff.length;
+
+        guitar(riff[position], t, 0.22);
+
+        if (Math.round(t / beat) % 2 === 0) {
+            drum(t, 110, 0.35, 0.18);
+        } else {
+            drum(t, 180, 0.18, 0.12);
+        }
+
+        if (Math.floor(t / 4) % 2 === 1) {
+            guitar(riff[position] * 2, t, 0.18);
+        }
+
+    }
+
+
+    victoryTimer = setTimeout(() => {
+
+        if (!stopped && victoryAudio === audio) {
+            audio.close();
+            victoryAudio = null;
+            stopButton.classList.add("hidden");
+        }
+
+    }, duration * 1000);
+
+}
+
+
+// STOP ROCKMUSIK
+
+function stopVictoryMusic() {
+
+    if (victoryTimer) {
+        clearTimeout(victoryTimer);
+        victoryTimer = null;
+    }
+
+    if (victoryAudio) {
+        victoryAudio.close();
+        victoryAudio = null;
+    }
+
+    document.getElementById("stopMusic").classList.add("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
